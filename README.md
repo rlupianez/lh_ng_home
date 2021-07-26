@@ -4,6 +4,8 @@
 
 ### Descripción: Contiene las apps de  /home/ y otras heredadas de Habito1
 
+---
+
 ## Versión: 1
 
 ```text
@@ -39,6 +41,6 @@ git init
 git add README.md
 git commit -m "first commit"
 git branch -M main
-git remote add origin `https://github.com/rlupianez/lh_ng_home.git`
+git remote add origin `https://github.com/usuario/lh_ng_home.git`
 git push -u origin main
 ```
