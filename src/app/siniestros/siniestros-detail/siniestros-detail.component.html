@@ -1,0 +1,35 @@
+<div class="detail-page p-4 pl-5 pr-5 detail-background-color container-fluid" @fadeIn>
+
+    <div class="row detail-header-row pr-0 pl-0 mb-3">
+        
+        <!------------------------>
+        <!--- DETAIL TITLE ------->
+        
+        <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 row detail-header-title pl-5" @fadeIn>
+            <button mat-mini-fab aria-label="Atrás" class="detail-btn-back" (click)="backRoute()">
+                <mat-icon>arrow_back</mat-icon>
+            </button> 
+            <h3 class="ml-3 w-75 detail-header-text font-weight-bold">Consulta Siniestro {{ siniestrosId }}</h3>
+        </div>
+    </div>
+    <!----------------------------------------------------------------------------->
+    <!-- Header -------------------------------------------------------------------->
+    <!-----------------------------------------------------------------------------> 
+    <app-siniestros-header *ngIf="!initialLoading" [data]="dataCabecera"></app-siniestros-header>    
+    <!----------------------------------------------------------------------------->
+    <!-- Card Form with Columns --------------------------------------------------->
+    <!-----------------------------------------------------------------------------> 
+    <div class="panel-form form-card row mb-3 p-4 card-border-primary">
+        <!-- formulario column-->
+        <ng-container *ngFor="let col of siniestrosCabecera['form'] | objectKeys">
+            <app-form-viewer [loading]="initialLoading" class="col-4 p-0" [formData]="dataCabecera || {}" [formConfig]="siniestrosCabecera['form'][col]"></app-form-viewer>
+        </ng-container>
+    </div>
+    <!----------------------------------------------------------------------------->
+    <!-- Acordeon form --------------------------------------------------->
+    <!----------------------------------------------------------------------------->
+    <app-accordion-form 
+        [loading]="initialLoading" 
+        [formConfig]="siniestrosAccordion" 
+        [iTables]="tables"></app-accordion-form>
+</div>

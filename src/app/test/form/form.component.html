@@ -1,0 +1,38 @@
+<div class="container m-5">
+    <div class="row mb-3 justify-content-center">
+        <h1>Formulario</h1>
+    </div>
+    <!--div class="row">
+        <app-filters-toolbar class="mt-6" [filters]="form" (sendFilters)="getFormData($event)"></app-filters-toolbar>
+    </div-->
+    <div class="row">
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-12 mb-3 route-animations-elements" >
+            <div class="card-body">
+                <h5 class="card-title">Form Data</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Datos obtenidos del formulario</h6>
+                <pre class="card-text">{{ formData | json }}</pre>
+            </div>
+        </div>
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-12 mb-3 route-animations-elements">
+            <div class="card-body">
+                <h5 class="card-title">Query String</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Query utilizado para llamada a api y obtener datos</h6>
+                <p class="card-text">{{ queryString }}</p>
+            </div>
+        </div>
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-12 mb-3 route-animations-elements">
+            <div class="card-body">
+                <h5 class="card-title">Form Data</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Datos obtenidos del formulario</h6>
+                <pre class="card-text">{{ formData | json }}</pre>
+            </div>
+        </div>
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-12 mb-3 route-animations-elements">
+            <div class="card-body">
+                <h5 class="card-title">Query String</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Query utilizado para llamada a api y obtener datos</h6>
+                <p class="card-text">{{ queryString }}</p>
+            </div>
+        </div>
+    </div>
+</div>

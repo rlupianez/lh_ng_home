@@ -1,0 +1,325 @@
+<div class="c-cotizador-container">
+  <!--mat-toolbar class="c-cotizador-toolbar">
+    <mat-toolbar-row>
+      <span class="c-cotizador-toolbar__title text-title">Cotizador Aeronavegación</span>
+    </mat-toolbar-row>
+  </mat-toolbar-->
+  <div class="container pt-4" @fadeIn>
+    <h1>
+      <button mat-mini-fab class="c-cotizador-title__icon"><mat-icon>flight</mat-icon></button>
+      Aeronavegación <span *ngIf="!nroCotizacion && !nroPropuesta"><mat-icon>arrow_forward_ios</mat-icon> Emitir</span>
+    </h1>
+    <h2 *ngIf="nroCotizacion">
+      Cotización #{{ nroCotizacion }}
+    </h2>
+    <h2 *ngIf="nroPropuesta">
+      Propuesta #{{ nroPropuesta }}
+    </h2>
+  </div>
+  <!--div class="c-form-panel-card-blur-overlay" *ngIf="loading"></div-->
+  <div class="cotizador-loader container h-100 col d-flex align-items-center justify-content-center" *ngIf="loading"  @fadeIn>
+    <div class="cotizador-loader-container mat-elevation-z1">
+      <img src="/assets/img/gifs/cotizador-loader.gif"/>
+      <h2 class="pulse">Obteniendo información</h2>
+    </div>
+  </div>
+  <div class="container pt-3 pb-5" *ngIf="loaded && !loading"  @fadeIn>
+
+    <!--div class="c-cotizador-header">
+      <h2 class="c-cotizador-header__title">Cotizar</h2>
+    </div-->
+      <!--------------------------------------->
+      <!-------- Datos Productor Panel -------->
+      <!--------------------------------------->
+    <section #f1 class="c-form-panel">
+      <mat-card class="c-form-panel-card w-100 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <!--div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'productor'"></div-->
+        <mat-card-header class="c-form-panel-card__header">
+          <mat-card-title  class="c-form-panel-card__title">
+            <h3>Datos Productor</h3>
+          </mat-card-title>
+          <button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.datosProductorService.active || !canEditPanel('productor') || !editable"
+            (click)="editPanel('productor')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+          
+            <form class="dynamic-form" [formGroup]="emitirService.datosProductorService.formGroup"> 
+              <app-dynamic-form-content class="row"
+                  [formConfig]="emitirService.datosProductorService.formGroupConfig" [formGroup]="emitirService.datosProductorService.formGroup">
+              </app-dynamic-form-content>
+            </form>
+        </mat-card-content>
+        <mat-card-actions  class="container" align="end" [hidden]="!emitirService.datosProductorService.active || !editable">
+          <button 
+            color="primary"
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.datosProductorService.valid"
+            mat-flat-button 
+            (click)="nextPanel(f2)">Confirmar</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+      <!--------------------------------------->
+      <!-------- Datos Tomador Panel -------->
+      <!--------------------------------------->
+    <section #f2 class="c-form-panel">
+      <mat-card class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-secundary">
+        <div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'tomador' && editable"></div>
+        <mat-card-header class="c-form-panel-card__header">
+        <mat-card-title  class="c-form-panel-card__title">
+          <h3>Datos Tomador</h3>
+        </mat-card-title>
+          <button 
+            mat-button class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.datosTomadorEmitirService.active || !canEditPanel('tomador') || !editable"
+            (click)="editPanel('tomador')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+            <form class="dynamic-form" [formGroup]="emitirService.datosTomadorEmitirService.formGroup"> 
+                <app-dynamic-form-content  class="row"
+                  [formConfig]="emitirService.datosTomadorEmitirService.formGroupConfig" [formGroup]="emitirService.datosTomadorEmitirService.formGroup">
+              </app-dynamic-form-content>
+            </form>
+        </mat-card-content>
+        <mat-card-actions class="container" align="end" [hidden]="!emitirService.datosTomadorEmitirService.active || !editable">
+          <button mat-button (click)="prevPanel(f1)">Atrás</button>
+          <button 
+            mat-flat-button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            color="primary" 
+            [disabled]="!emitirService.datosTomadorEmitirService.valid"
+            (click)="guardarPropuesta()">Guardar</button>
+          <button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.datosTomadorEmitirService.valid"
+            mat-flat-button color="primary" (click)="nextPanel(f3)">Confirmar</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+      <!----------------------------------------------->
+      <!-------- Condiciones Comerciales Panel -------->
+      <!----------------------------------------------->
+    <section #f3 class="c-form-panel">
+      <mat-card class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'condiciones-comerciales' && editable"></div>
+        <mat-card-header class="c-form-panel-card__header">
+        <mat-card-title  class="c-form-panel-card__title">
+          <h3>Condiciones y beneficios Comerciales</h3></mat-card-title>
+          <button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.condicionesComercialesEmitirService.active || !canEditPanel('condiciones-comerciales') || !editable"
+            (click)="editPanel('condiciones-comerciales')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+            <form class="dynamic-form" [formGroup]="emitirService.condicionesComercialesEmitirService.formGroup"> 
+               
+                <app-dynamic-form-content class="row"
+                  [formConfig]="emitirService.condicionesComercialesEmitirService.formGroupConfig" [formGroup]="emitirService.condicionesComercialesEmitirService.formGroup">
+                </app-dynamic-form-content>
+               
+            </form>
+            <div class="row" *ngIf="emitirService.condicionesComercialesEmitirService.showCreditCardForm && editable">
+              
+              <app-credit-card class="w-100" [codAsegurado]="emitirService.condicionesComercialesEmitirService.codAsegurado" (isValidEvent)="emitirService.condicionesComercialesEmitirService.getCreditCardForm($event)"></app-credit-card>
+            </div>
+            
+        </mat-card-content>
+        <mat-card-actions class="container" align="end" [hidden]="!emitirService.condicionesComercialesEmitirService.active || !editable">
+          <button mat-button (click)="prevPanel(f2)">Atrás</button>
+          <button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.condicionesComercialesEmitirService.valid"
+            mat-flat-button color="primary" (click)="guardarPropuesta()">Guardar</button>
+          <button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.condicionesComercialesEmitirService.valid"
+            mat-flat-button color="primary" (click)="finalizar()">Finalizar</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+      <!----------------------------------------------->
+      <!-------- Tipo de Riesgo ----------------------->
+      <!----------------------------------------------->
+    <section #f4 class="c-form-panel">
+      <mat-card  class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-secundary">
+        <!--div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'tipo-riesgo'"></div-->
+        <mat-card-header class="c-form-panel-card__header">
+        <mat-card-title  class="c-form-panel-card__title">
+          <h3>Tipo de Riesgo</h3></mat-card-title>
+          <button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.riesgosService.tipoRiesgo.active  || !canEditPanel('tipo-riesgo')"
+            (click)="editPanel('tipo-riesgo')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+            <form
+                class="dynamic-form"
+                [formGroup]="emitirService.riesgosService.tipoRiesgo.formGroup"> 
+                <app-dynamic-form-content  class="row"
+                  [formConfig]="emitirService.riesgosService.tipoRiesgo.formGroupConfig" [formGroup]="emitirService.riesgosService.tipoRiesgo.formGroup">
+              </app-dynamic-form-content>
+            </form>
+        </mat-card-content>
+        <mat-card-actions class="container" align="end" [hidden]="!emitirService.riesgosService.tipoRiesgo.active">
+          <button mat-button (click)="prevPanel(f3)">Atrás</button>
+          <button 
+            [disabled]="!emitirService.riesgosService.tipoRiesgoValid"
+            class="c-form-panel-card__confirm-btn ml-2"
+            mat-flat-button color="primary" (click)="nextPanel(f5)">Confirmar</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+      <!----------------------------------------------->
+      <!-------- Datos de Riesgo ----------------------->
+      <!----------------------------------------------->
+    <section #f5 class="c-form-panel">
+      <mat-card class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <!--div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'datos-riesgo'"></div-->
+        <mat-card-header class="c-form-panel-card__header">
+        <mat-card-title  class="c-form-panel-card__title">
+          <h3>Datos de Riesgo</h3></mat-card-title>
+          <button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.riesgosService.datosRiesgo.active  || !canEditPanel('datos-riesgo')"
+            (click)="editPanel('datos-riesgo')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+            <form
+                class="dynamic-form"
+                [formGroup]="emitirService.riesgosService.datosRiesgo.formGroup"> 
+                <app-dynamic-form-content  class="row"
+                  [formConfig]="emitirService.riesgosService.datosRiesgo.formGroupConfig" [formGroup]="emitirService.riesgosService.datosRiesgo.formGroup">
+              </app-dynamic-form-content>
+            </form>
+        </mat-card-content>
+        <mat-card-actions class="container" align="end" [hidden]="!emitirService.riesgosService.datosRiesgo.active">
+          <button mat-button (click)="prevPanel(f4)">Atrás</button>
+          <button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.riesgosService.datosRiesgoValid"
+            mat-flat-button color="primary" (click)="nextPanel(f6)">Confirmar</button>
+        </mat-card-actions>
+      </mat-card>
+  </section>
+      <!----------------------------------------------->
+      <!-------- Productos ----------------------->
+      <!----------------------------------------------->
+    <section #f6 class="c-form-panel">
+      <mat-card class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-secundary">
+        <!--div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'productos'"></div-->
+        <mat-card-header class="c-form-panel-card__header">
+        <mat-card-title  class="c-form-panel-card__title">
+          <h3>Productos</h3></mat-card-title>
+          <button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.datosProductorService.active  || !canEditPanel('productos')"
+            (click)="editPanel('productos')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+            <form
+                class="dynamic-form"
+                [formGroup]="emitirService.productosService.formGroup"> 
+                <app-dynamic-form-content  class="row"
+                  [formConfig]="emitirService.productosService.formGroupConfig" [formGroup]="emitirService.productosService.formGroup">
+              </app-dynamic-form-content>
+            </form>
+        </mat-card-content>
+        <mat-card-actions class="container" align="end" [hidden]="!emitirService.productosService.active">
+          <button mat-button (click)="prevPanel(f5)">Atrás</button>
+          <button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.productosService.valid"
+            mat-flat-button color="primary" (click)="nextPanel(f7)">Confirmar</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+      <!----------------------------------------------->
+      <!-------- Usos --------------------------------->
+      <!----------------------------------------------->
+    <section #f7 class="c-form-panel">
+      <mat-card  class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <!--div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'usos'"></div-->
+        <mat-card-header class="c-form-panel-card__header">
+        <mat-card-title  class="c-form-panel-card__title">
+          <h3>Usos</h3></mat-card-title>
+          <button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.usosService.active || !canEditPanel('usos')"
+            (click)="editPanel('usos')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+            <form
+                class="dynamic-form container"
+                [formGroup]="emitirService.usosService.formGroup"> 
+                <app-dynamic-form-content  class="row"
+                  [formConfig]="emitirService.usosService.formGroupConfig" [formGroup]="emitirService.usosService.formGroup">
+              </app-dynamic-form-content>
+            </form>
+        </mat-card-content>
+        <mat-card-actions class="container" align="end" [hidden]="!emitirService.usosService.active">
+          <button mat-button (click)="prevPanel(f6)">Atrás</button>
+          <button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.usosService.valid"
+            mat-flat-button color="primary" (click)="nextPanel(f8)">Confirmar</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+
+      <!----------------------------------------------->
+      <!-------- Coberturas --------------------------------->
+      <!----------------------------------------------->
+    <section #f8 class="c-form-panel">
+      <mat-card class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-secundary">
+        <!--div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'coberturas'"></div-->
+        <mat-card-header class="c-form-panel-card__header">
+        <mat-card-title  class="c-form-panel-card__title">
+          <h3>Coberturas</h3></mat-card-title>
+          <button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="emitirService.coberturasService.active || !canEditPanel('coberturas')"
+            (click)="editPanel('coberturas')">Modificar</button>
+        </mat-card-header>
+        <mat-card-content class="container">
+            <form
+                class="dynamic-form"
+                [formGroup]="emitirService.coberturasService.formGroup"> 
+                <app-dynamic-form-content  class="row"
+                  [formConfig]="emitirService.coberturasService.formGroupConfig" [formGroup]="emitirService.coberturasService.formGroup">
+              </app-dynamic-form-content>
+            </form>
+        </mat-card-content>
+        <mat-card-actions class="container" align="end" [hidden]="!emitirService.coberturasService.active">
+          <button mat-button (click)="prevPanel(f7)">Atrás</button>
+          <button
+            [disabled]="!emitirService.coberturasService.valid"
+            mat-flat-button (click)="guardarPropuesta()">Guardar</button>
+          <button 
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!emitirService.coberturasService.valid"
+            mat-flat-button color="primary" (click)="finalizar()">Finalizar</button>
+        </mat-card-actions>
+      </mat-card>
+    </section>
+
+  </div>
+
+  <!--mat-toolbar #footer *ngIf="emitirService.allFormsValid && editable" class="c-cotizador-toolbar-footer stycky-position fixed-bottom">
+    <mat-toolbar-row>
+   
+      <span class="example-spacer"></span>
+    <button 
+      class="c-form-panel-card__confirm-btn ml-2"
+      mat-flat-button color="primary" (click)="emitirCotizacion()">Emitir</button>
+    </mat-toolbar-row>
+  </mat-toolbar-->
+</div> 

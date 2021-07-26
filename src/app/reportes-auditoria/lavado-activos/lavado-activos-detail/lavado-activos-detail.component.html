@@ -1,0 +1,74 @@
+<mat-progress-bar *ngIf="loading" class="col-12 col-sm-12 col-md-12 col-lg-12" mode="indeterminate"></mat-progress-bar>
+<div class="detail-page p-4 pl-5 pr-5 detail-background-color" @fadeIn>
+
+    <!----------------------------------------------------------------------------->
+    <!--    DETAIL HEADER       --------------------------------------------------->
+    <!----------------------------------------------------------------------------->
+
+    <div class="row mb-4 ml-2" *ngIf="!initialLoading" @fadeIn>
+        <button mat-mini-fab aria-label="Atrás" class="detail-btn-back" (click)="backRoute()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h3 class="ml-3 detail-header-text">Detalle Asegurado {{ id }}</h3>
+    </div>
+
+    <!--------- Skeleton ---------->
+    <div class="col-8 row detail-header-title mb-4" *ngIf="initialLoading">
+        <app-form-control-skeleton-loader class="col-8 h-100 row">
+            <div class="icon-xs col-1"></div>
+            <h5 class="h-100 m-auto col-9"></h5>
+        </app-form-control-skeleton-loader>
+    </div>
+
+    <!----------------------------------------------------------------------------->
+    <!--    DETAIL FORMS       --------------------------------------------------->
+    <!----------------------------------------------------------------------------->
+
+    <ng-container *ngFor="let formName of detailConfig | objectKeys; let idx = index;">
+        <div class="panel-form form-card card-border-primary row mb-3 p-4">
+
+            <div class="col-12 pl-0 mb-2" *ngIf="!initialLoading" @fadeIn>
+                <h5 class="accordeon-header-icon-title">{{ detailConfig[formName].text }}</h5>
+            </div>
+
+            <div class="col-12 pl-0 mb-2" *ngIf="initialLoading">
+                <app-form-control-skeleton-loader>
+                    <h5 class="col-4"></h5>
+                </app-form-control-skeleton-loader>
+            </div>
+
+
+            <div class="row col-12">
+                <!-- formulario column-->
+                <div class="col-{{ 12 / detailConfig[formName].cols }} p-0"
+                    *ngFor="let fieldCol of detailConfig[formName] | formViewerColumns">
+                    <app-form-viewer [loading]="loadingForm(formName)" class="w-100 p-0" [formConfig]="fieldCol"
+                        [formData]="data"></app-form-viewer>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <app-accordion-custom [accordion]="accordionSeccion" (actionEvent)="accordionSeccionOpened($event)"
+        (clickRowEvent)="accordionSeccionClick($event, idAccordionPoliza, idAccordionDocumentacion, idAccordionAnalisis)">
+    </app-accordion-custom>
+
+    <app-accordion-custom [accordion]="accordionPoliza" #idAccordionPoliza="appAccordionCustom"
+        (clickRowEvent)="accordionPolizaClick($event)">
+    </app-accordion-custom>
+
+    <app-accordion-custom [accordion]="accordionDocumentacion" [formGroup]="formGroup"
+        (onChange)="onDocumentacionChange($event)" (onClickDelete)="onClickDeleteDocument($event)"
+        #idAccordionDocumentacion="appAccordionCustom"
+        (clickCheckboxEvent)="accordionDocumentacionCheckboxClick($event)">
+    </app-accordion-custom>
+
+    <app-accordion-custom [accordion]="accordionAnalisis" (onSubmitForm)="onAnalisisSubmit()"
+        #idAccordionAnalisis="appAccordionCustom">
+    </app-accordion-custom>
+
+    
+    <app-accordion-custom [accordion]="accordionObservaciones" (onSubmitForm)="onObservacionesSubmit()"
+        #idAccordionObservaciones="appAccordionCustom">
+    </app-accordion-custom>
+</div>

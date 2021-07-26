@@ -1,0 +1,187 @@
+<mat-accordion class="col-12">
+    <mat-expansion-panel class="row mat-elevation-z0 bordered-panel card-border-primary"
+        [ngClass]="{ 'form-accordion-active': accordion.active }" (opened)="panelOpened($event)"
+        (closed)="closeAccordion()" [disabled]=accordion.disabled #accordionCustom="matExpansionPanel">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <ng-container *ngIf="!isLoading">
+                    <h5 *ngIf="accordion.expanded">
+                        <!-- expandido -->
+                        <strong>
+                            {{ accordion.title }}
+                        </strong>
+                    </h5>
+                    <h5 *ngIf="!accordion.expanded">
+                        <!-- no expandido-->
+                        {{ accordion.title }}
+                    </h5>
+                </ng-container>
+                <app-form-control-skeleton-loader class="col-4 text-center mt-2" *ngIf="isLoading">
+                    <h5></h5>
+                </app-form-control-skeleton-loader>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div *ngIf="!isLoading">
+            <ng-container>
+                <div class="row h-xs" *ngIf="accordion.data?.length == 0">
+                    <p class="m-auto text-center">
+                        {{ accordion.emptyMessage }}
+                    </p>
+                </div>
+            </ng-container>
+        </div>
+        <!-- agrego un input que solo lo va a usar en lavado activo -->
+        <div *ngIf="accordion.headerCheckbox" class="headerCheckbox">
+            <!-- (change)="onChange($event)" -->
+            <mat-checkbox (change)="onChangeCheckbox($event)" [value]="accordion.headerCheckboxValue"
+                class="c-checklist-section-item__checkbox" [checked]="accordion.headerCheckboxValue">
+                <span class="c-checklist-section-item__text">
+                    {{ accordion.headerCheckboxLabel }}
+                </span>
+            </mat-checkbox>
+        </div>
+        <div class="list-table">
+            <mat-progress-bar *ngIf="accordion.loading" class="col-12 col-sm-12 col-md-12 col-lg-12"
+                mode="indeterminate"></mat-progress-bar>
+
+            <mat-progress-bar *ngIf="accordion.loadingChanges" class="col-12 col-sm-12 col-md-12 col-lg-12"
+                mode="indeterminate"></mat-progress-bar>
+            <table class="w-100 table-hover" mat-table [dataSource]="accordion.data" matSort
+                *ngIf="!accordion.loading && accordion.type == 'table'">
+                <ng-container *ngFor="let item of accordion.list; index as fieldIndex;">
+                    {{ item.name }}
+                    <ng-container [matColumnDef]="item.name">
+                        <th mat-header-cell class="text-center pl-3" *matHeaderCellDef mat-sort-header
+                            [hidden]="!accordion.list[fieldIndex].visible">
+                            <h6>{{ accordion.list[fieldIndex].label }}</h6>
+                        </th>
+                        <td mat-cell class="{{ accordion.list[fieldIndex].cellStyle || 'text-center' }} cuerpo-listado"
+                            *matCellDef="let row; let rowIndex = index;" [hidden]="!accordion.list[fieldIndex].visible">
+                            <ng-container *ngIf="item.editable === true; then input; else value">
+                            </ng-container>
+
+                            <ng-template #input>
+                                <ng-container ngDefaultControl appDynamicField appDynamicFieldError
+                                    (focusout)="onFocusOut($event, item.nameInput || item.name, row, rowIndex, fieldIndex)"
+                                    [controlOptions]="accordion.list[fieldIndex]"
+                                    [iFormControl]="formGroup[rowIndex].controls[fieldIndex]">
+                                </ng-container>
+                            </ng-template>
+
+                            <ng-template #value>
+                                <ng-container *ngIf="item.type === 'date'">
+                                    {{ row[item.name] | date : 'MM/dd/y' }}
+                                </ng-container>
+                                <ng-container *ngIf="item.type === 'currency'">
+                                    {{ row[item.name] | moneda }}
+                                </ng-container>
+                                <ng-container *ngIf="item.type === 'link' && row[item.name]">
+                                    <div class="link-container">
+                                        <a href="{{ row[item.name] }}" target="_blank">
+                                            <!-- TODO: agregar una clase para el ancho -->
+                                            <span class="material-icons doc" *ngIf="!row['tipo_archivo']">
+                                                insert_drive_file
+                                            </span>
+                                            <img *ngIf="row['tipo_archivo'] == 'word'" src="assets/img/iconos/word.png">
+                                            <img *ngIf="row['tipo_archivo'] == 'xls'" src="assets/img/iconos/excel.png">
+                                            <img *ngIf="row['tipo_archivo'] == 'pdf'" src="assets/img/iconos/pdf.png">
+                                            <span class="material-icons doc" *ngIf="row['tipo_archivo'] == 'jpg'">
+                                                image
+                                            </span>
+                                            <a *ngIf="item.delete" href="#" (click)="onClickDeleteLink($event, row)"
+                                                class="link_delete">
+                                                <span class="material-icons">
+                                                    highlight_off
+                                                </span>
+                                            </a>
+                                        </a>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="item.type === 'listLink' && row[item.name]">
+                                    <ng-container *ngFor="let fileData of row[item.name]">
+                                        <div class="link-container">
+                                            <a *ngIf="item.delete" href="#"
+                                                (click)="onClickDeleteLink($event, row, fileData)" class="link_delete">
+                                                <span class="material-icons">
+                                                    highlight_off
+                                                </span>
+                                            </a>
+                                            <a href="{{ fileData.link_documento }}" class="link-file" target="_blank">
+                                                <container-element [ngSwitch]="fileData.tipo_archivo">
+                                                    <!-- the same view can be shown in more than one case -->
+                                                    <some-element *ngSwitchCase="'doc'">
+                                                        <img src="assets/img/iconos/word.png"
+                                                            title="{{ fileData['desc_archivo'] + '.' + fileData['tipo_archivo']}}">
+                                                    </some-element>
+                                                    <some-element *ngSwitchCase="'docx'">
+                                                        <img src="assets/img/iconos/word.png"
+                                                            title="{{ fileData['desc_archivo'] + '.' + fileData['tipo_archivo']}}">
+                                                    </some-element>
+                                                    <some-element *ngSwitchCase="'xls'">
+                                                        <img src="assets/img/iconos/excel.png"
+                                                            title="{{ fileData['desc_archivo'] + '.' + fileData['tipo_archivo']}}">
+                                                    </some-element>
+                                                    <some-element *ngSwitchCase="'xlsx'">
+                                                        <img src="assets/img/iconos/excel.png"
+                                                            title="{{ fileData['desc_archivo'] + '.' + fileData['tipo_archivo']}}">
+                                                    </some-element>
+                                                    <some-other-element *ngSwitchCase="'pdf'">
+                                                        <img src="assets/img/iconos/pdf.png"
+                                                            title="{{ fileData['desc_archivo'] + '.' + fileData['tipo_archivo']}}">
+                                                    </some-other-element>
+                                                    <some-other-element *ngSwitchCase="'jpg'">
+                                                        <img src="assets/img/iconos/logo_img.png"
+                                                            title="{{ fileData['desc_archivo'] + '.' + fileData['tipo_archivo']}}"
+                                                            style="border-radius: 8px; width: 35px; margin-top: 3px;">
+                                                    </some-other-element>
+                                                    <some-element *ngSwitchDefault>
+                                                        <span class="material-icons doc"
+                                                            title="{{ fileData['desc_archivo'] + '.' + fileData['tipo_archivo']}}">
+                                                            insert_drive_file
+                                                        </span>
+                                                    </some-element>
+                                                </container-element>
+                                            </a>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                                <!-- Cuando es select y tengo una lista hardcode, muestro el value de la lista-->
+                                <ng-container *ngIf="item.type === 'select' && accordion.list[fieldIndex].control.list">
+                                    <ng-container *ngFor="let elementList of accordion.list[fieldIndex].control.list">
+                                        <ng-container *ngIf="elementList.key == row[item.name]">
+                                            {{ elementList.value}}
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                                <!-- Cuando tengo un select dinamico pero tengo el campo descripcion, seteo un displayName para mostrar ese campo-->
+                                <ng-container *ngIf="item.type === 'select' && item.displayName">
+                                    {{ row[item.displayName]}}
+                                </ng-container>
+                                <ng-container *ngIf="item.type === 'text'">
+                                    {{ row[item.name]}}
+                                </ng-container>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                </ng-container>
+                <tr mat-header-row class="cabecera-listado" *matHeaderRowDef="accordion.columns">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: accordion.columns;" class="pointer"
+                    (click)="clickRow($event, row)"></tr>
+            </table>
+        </div>
+        <ng-container *ngIf="!isLoading && accordion.type === 'form' && accordion.formGroup">
+            <ng-container ngDefaultControl appDynamicField appDynamicFieldError (focusout)="onFocusOut($event)"
+                [controlOptions]="accordion.input[0]" [iFormControl]="accordion.formGroup.controls[0]">
+            </ng-container>
+            <button mat-button mat-flat-button class="boton-aplicar" color="primary"
+                (click)="buttonClick()">
+                <span *ngIf="!isLoading">Guardar</span>
+                <mat-icon *ngIf="isLoading">
+                    <mat-spinner diameter="20"></mat-spinner>
+                </mat-icon>
+            </button>
+        </ng-container>
+    </mat-expansion-panel>
+</mat-accordion>

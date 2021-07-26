@@ -1,0 +1,343 @@
+<!--div *ngIf="favManagerStatus === 'in'" class="blur-background"></div-->
+<div class="container-fluid home-page">
+    <!---- BANNER -----> 
+    <ng-container *ngIf="showBanner">
+      <div class="container-fluid botonera p-0 m-0">
+        <img [src]="bannerImg" class="img-fluid h-100 w-100"/>
+      </div>
+    </ng-container>
+  
+    <div class="container-fluid botonera card-2" *ngIf="showFavorites"> 
+
+      <ng-container *ngIf="!loadingFavorites" @fadeIn>
+        <div class="col-12 row fav-header">
+            <h4 mat-header class="col-6">Mi lista</h4>
+            <div class="col-6 pr-0" align="end">
+              <button mat-button class="selector-btn float-right align-end" matTooltip="Modificar Favoritos" (click)="changeFavManagerStatus()">
+                Selector de Favoritos <mat-icon class="align-end p-0" aria-hidden="false">settings</mat-icon>
+              </button>
+              
+            </div>
+        </div>
+
+        <div class="col-12 fav-list p-0" @fadeIn>
+            <nav class="direct-access-list mb-3 mt-2 pb-0">
+              <owl-carousel-o [options]="favOptions" class="lista-item direct-access-item text-center w-100 slider-custom-nav">
+                <ng-container  *ngFor="let item of miListaItems; let is = index;" >
+                  <ng-template carouselSlide [id]="is">
+                    <div class="slider lista-item direct-access-item text-center" (click)="listAction(item)">
+
+                      <ng-container *ngIf="!item['url_imagen']">
+                        <mat-icon *ngIf="item['t_favorito'] === 'usuario'" favoriteBadge MatBadgeSize="small" matBadge="*" class="mt-2 direct-access-item-icon botonera-icono botonera-favorite" aria-hidden="false" svgIcon="">   </mat-icon>
+                        <mat-icon *ngIf="item['t_favorito'] !== 'usuario'" class="mt-2 direct-access-item-icon botonera-icono" aria-hidden="false" svgIcon="">   </mat-icon>
+                      </ng-container>
+                      
+                      <ng-container *ngIf="item['url_imagen']">
+                        <!--mat-icon *ngIf="item.t_favorito === 'usuario'" favoriteBadge MatBadgeSize="small" matBadge="*" class="direct-access-item-icon botonera-icono botonera-favorite" aria-hidden="false" svgIcon="{{ miListaIcono }}">   </mat-icon>
+                        <mat-icon *ngIf="item.t_favorito !== 'usuario'" class="direct-access-item-icon botonera-icono" aria-hidden="false" svgIcon="{{ miListaIcono }}">   </mat-icon-->
+                        
+                          <div *ngIf="item['t_favorito'] === 'usuario'" favoriteBadge MatBadgeSize="small" matBadge="*" class="direct-access-item-icon direct-access-item-img botonera-icono botonera-favorite">
+                          <div class="item-img w-100">
+                            <img class="img-fluid" [src]="item['url_imagen']">
+                            <!--object class="item-img"  [data]="item.url_imagen" type="image/svg+xml"></object-->
+                          </div>
+                        </div>
+
+                        <div *ngIf="item['t_favorito'] !== 'usuario'" class="direct-access-item-icon direct-access-item-img botonera-icono botonera-favorite">
+                          <div class="item-img w-100">
+                            <img class="img-fluid" [src]="item['url_imagen']">
+                            <!--object class="item-img"  [data]="item.url_imagen" type="image/svg+xml"></object-->
+                          </div>
+                        </div>      
+                          
+                      </ng-container>
+                      <h5 class="direct-access-item-title">{{ item['etiqueta'] }}</h5>
+                    </div>
+                  </ng-template>
+                </ng-container>
+              </owl-carousel-o>
+            </nav>
+        </div>
+      </ng-container>
+
+
+      <!-- skeleton -->
+      <ng-container *ngIf="loadingFavorites">
+        <div class="col-12 row fav-header">
+          <app-form-control-skeleton-loader class="col-3">
+            <h4></h4>
+          </app-form-control-skeleton-loader>
+        </div>
+        <div class="col-12 fav-list">
+            <nav class="direct-access-list nav nav-pills d-flex mb-3 mt-3">
+              <div class="lista-item direct-access-item flex-fill text-center" *ngFor="let item of emptyLista">
+                <app-form-control-skeleton-loader [show]="true">
+                  <div class="milista-item mb-2"></div>
+                  <h4 class="col-10 m-auto"></h4>
+                </app-form-control-skeleton-loader>
+              </div>
+            </nav>
+        </div>
+      </ng-container>
+
+    </div>
+
+    <!----------------------------------------------
+                  FAVORITOS MANAGER
+    ------------------------------------------------>
+    <app-favoritos-manager 
+      class="action-container" 
+      [managerStatus]="favManagerStatus"
+      (changesApplied)="saveFavoriteChanges($event)"></app-favoritos-manager>
+      
+
+    <!-- ----------------------------------------
+
+                  SELECTOR DE COTIZADORES 
+
+    ------------------------------------------------>
+    <div  *ngIf="showCotSelector" @slideInRight>
+      <app-cotizadores-selector 
+        @slideInRight
+        [show]="showCotSelector"
+        (closeSelector)="closeSelector()"></app-cotizadores-selector>
+    </div>
+
+      <!-- Lista de Tarjetas -->
+    
+    <div *ngIf="!showCotSelector" @fadeIn>
+      <section class="contenido flex-container cards-container">
+
+      <!----------------------------------------------
+                  NOVEDADES
+      ------------------------------------------------>
+       
+        <article class="card card-1 tarj-novedades" *ngIf="!initialLoading && showNovedades" @fadeIn> 
+        
+            <div class="card-body card-contenido content-list-nov">
+              <div class="card-title">
+                <h4>Novedades</h4>
+              </div>
+              <div class="content-nov-list">       
+              <div class="mat-novedad " *ngFor="let nov of novedadesItems; let idx = index;" (click)="showNovedad(idx)" @fadeIn>
+                <div class="row col-12 pr-0">
+                  <div class="col-12 novedad-body">
+                    <h5 mat-line class="text-date">{{nov['fecha']}}</h5>
+                    <h4 mat-line class="text-tit-nov">{{nov['titulo']}}</h4>
+                    <p mat-line class="text-nov" [innerHtml]="nov['resumen']"></p>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div class="novedades-see-more" class="ver-ms-novedades">
+              <button 
+                mat-button 
+                color="primary"
+                (click)="loadMoreNews()"
+                [disabled]="novedadesItems.length === novedadesAllItems.length"> Ver más novedades</button>
+            </div>
+        </article> 
+
+        <!--- Skeleton novedades --->
+
+        <article class="card card-1 tarj-novedades" *ngIf="initialLoading && showNovedades">
+          <div class="card-body card-contenido">
+            <div class="card-title">
+              <app-form-control-skeleton-loader>
+                <h4 class="nov-title col-10 m-auto mb-2"></h4>
+              </app-form-control-skeleton-loader>
+            </div>       
+            <div class="mat-novedad" *ngFor="let nov of emptyNovedades; let idx = index;">
+              <div class="row col-12 pr-0">
+                <div class="col-5 novedad-img">
+                  <app-form-control-skeleton-loader>
+                    
+                  </app-form-control-skeleton-loader>
+                </div>
+                <div class="col-7 novedad-body">
+                  <app-form-control-skeleton-loader [show]="true">
+                    <h5 mat-line class="text-date"></h5>
+                    <h4 mat-line class="text-tit-nov"></h4>
+                    <p mat-line class="text-nov"></p>
+                  </app-form-control-skeleton-loader>     
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="novedades-see-more" class="ver-ms-novedades">
+            <app-form-control-skeleton-loader>
+              <h4 class="col-8 m-auto"></h4>
+            </app-form-control-skeleton-loader>
+          </div>
+      </article> 
+
+        <!----------------------------------------------
+                  COTIZACIONES
+        ------------------------------------------------>
+        <article class="card card-2 tarj-cotizacion" *ngIf="!initialLoading && showCotizaciones" @fadeIn>
+            <div class="col-12 pt-2 pl-4 pr-4">
+              <div class="row">
+                <section class="card-title col-6">
+                  <h4>
+                    La cotización hoy
+                  </h4>                
+                </section>
+                <!--section class="col-6 cotiz-variacion">
+                  <p class="col-12 mb-0 text-right">
+                    <span class="txt-variacion">
+                        Variación:
+                    </span>  
+                    <span class="val-variacion">
+                        1,7500%
+                    </span>
+                  </p>
+                </section-->
+              </div>
+              <div class="row">
+                <section class="cotiz-item" *ngFor="let item of cambios">
+                  <p class="w-100 mb-0 cotiz-content">
+                    <span clasS="txt">{{ item['abrev'] }}</span>
+                    <span class="value float-right">{{ item['cambio'] }}</span>
+                  </p>  
+                </section>
+                <!--section class="cotiz-item">
+                  <p class="w-100 mb-0 cotiz-content">
+                    <span clasS="txt">Venta:</span>
+                    <span class="value float-right">$58</span>
+                  </p>  
+                </section-->
+              </div>
+            </div>       
+        </article>
+
+        <!--- Skeleton cotizadores --->
+
+        <article class="card card-2 tarj-cotizacion" *ngIf="initialLoading && showCotizaciones">
+          <div class="col-12 pt-2 pl-4 pr-4">
+            <div class="row">
+              <section class="card-title col-6">
+                <app-form-control-skeleton-loader>
+                  <h4></h4>
+                </app-form-control-skeleton-loader>          
+              </section>
+              <section class="col-6 cotiz-variacion">
+                <p class="col-12 mb-0 text-right">
+                  <app-form-control-skeleton-loader>
+                    <h4></h4>
+                  </app-form-control-skeleton-loader>      
+                </p>
+              </section>
+            </div>
+            <div class="row">
+              <section class="cotiz-item">
+                <p class="w-100 mb-0 cotiz-content">
+                  <app-form-control-skeleton-loader>
+                    <h4></h4>
+                  </app-form-control-skeleton-loader>  
+                </p>  
+              </section>
+              <section class="cotiz-item">
+                <p class="w-100 mb-0 cotiz-content">
+                  <app-form-control-skeleton-loader>
+                    <h4></h4>
+                  </app-form-control-skeleton-loader>  
+                </p>  
+              </section>
+            </div>
+          </div>       
+      </article>
+
+        <!----------------------------------------------
+                  INDICADORES 
+        ------------------------------------------------>
+        <!---- BANNER REEMPLAZO INDICADORES ----->
+        
+        <article class="card card-2 tarj-indicadores" *ngIf="!indicadoresLoading && showIndicadores" @fadeIn>
+          <div class="card-title">
+            <h4>
+              Indicadores de gestión
+            </h4>                
+          </div>
+          <section class="indicador-item">
+            <div class="indicador-home" *ngFor="let ind of indicadores; let idx = index;">  
+              <article class="indicador-content">
+                  <circle-progress class="indicador-size"  
+                    percent="{{ [ind['cant_indicador']] }}"
+                    [radius]="100"
+                    [showUnits]="false"
+                    [maxPercent]="10000000000"
+                    [responsive]="true"
+                    [outerStrokeWidth]="18"
+                    [innerStrokeWidth]="11"
+                    [outerStrokeGradientStopColor]="ind['desc_color']"
+                    [outerStrokeColor]="ind['desc_color']"
+                    [innerStrokeColor]="'#edf0f4'"
+                    [animation]="true"
+                    [animationDuration]="400"
+                    [subtitle]="ind['desc_indicador']">
+                  </circle-progress>
+                </article>   
+              </div>      
+            </section>  
+        </article> 
+
+        <!--- Skeleton indicadores --->
+
+        <article class="card card-2 tarj-indicadores" *ngIf="indicadoresLoading && showIndicadores">
+          <div class="card-title">
+            <app-form-control-skeleton-loader>
+                <h4></h4>    
+            </app-form-control-skeleton-loader>               
+          </div>
+          <section class="indicador-item w-100">
+            <div class="indicador-home col-4" *ngFor="let ind of emptyIndicadores; let idx = index;">  
+              <article class="indicador-content h-100">
+                <app-form-control-skeleton-loader>
+                  <div class="icon-full mb-2"></div>
+                </app-form-control-skeleton-loader>   
+              </article>   
+            </div>      
+          </section>  
+        </article> 
+
+        <!----------------------------------------------
+                 CAROUSEL
+        ------------------------------------------------>
+
+        <article class="card card-s card-slider" *ngIf="!initialLoading && showCarrusel" @fadeIn>
+          <div class="h-100">
+            <owl-carousel-o [options]="customOptions" class="card-body card-slider h-100">
+              <ng-container *ngFor="let item of slidersItems; let is = index;" >
+                <ng-template carouselSlide [id]="is" class="h-100">
+                  
+                  <img [src]="item['url_imagen']" [title]="item['titulo']">
+                  <div class="slide-content" (click)="itemClicked(item)">
+                    <h2 class="item-title">{{ item['titulo'] }}</h2>
+                    <p class="item-subtitle">{{ item['sub-titulo'] }}</p>
+                  </div>
+                  
+                </ng-template>
+              </ng-container>
+            </owl-carousel-o>
+          </div>
+
+          
+        </article>
+
+        <!---- Skeleton Slider ---->
+        <article class="card card-s card-slider" *ngIf="initialLoading && showCarrusel">
+          <div class="h-100 w-100">
+            <app-form-control-skeleton-loader>
+              <div class="img-full h-100 w-100"></div>
+            </app-form-control-skeleton-loader>
+          </div>
+        </article>
+        
+     
+      </section>
+      
+      
+    </div>
+
+</div>

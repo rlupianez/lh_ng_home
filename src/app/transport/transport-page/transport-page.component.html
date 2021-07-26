@@ -1,0 +1,56 @@
+<!------ PANEL DATOS DE PRODUCTOR ------->
+<app-panel-form 
+    title="Cotizador Transporte" 
+    btnLabelPrimary="confirmar" 
+    (eventActionPrimary)="confirmar()" 
+    [disabledBtnPrimary]="false"
+    [isDisabled]="false" 
+    classPanel="col-md-10 offset-md-1">
+
+    <section class="divide-panel">
+
+        <app-sub-panel-form title="Datos Productor">
+            <app-form-base [service]="transportService.productorService">
+            </app-form-base>
+
+        </app-sub-panel-form>
+
+        <app-sub-panel-form title="Datos Tomador">
+            <app-form-base [service]="transportService.takerService">
+            </app-form-base>
+        </app-sub-panel-form>
+
+        <app-sub-panel-form title="Condiciones y beneficios comerciales">
+            <app-form-base [service]="transportService.conditionsBenefitsCommercialService">
+            </app-form-base>
+        </app-sub-panel-form>
+
+        <app-sub-panel-form title="Datos del Riesgo">
+            <app-form-base [service]="transportService.riskService">
+            </app-form-base>
+        </app-sub-panel-form>
+
+        <app-sub-panel-form title="Tránsito local"
+            *ngIf="transportService.trafficTypeValueEnum === trafficTypeValueEnum.LocalTransit">
+            <app-form-base [service]="transportService.localTransitService">
+            </app-form-base>
+            <app-transport-label text="Tránsito local"></app-transport-label>
+        </app-sub-panel-form>
+
+        <app-sub-panel-form title="Importación"
+            *ngIf="transportService.trafficTypeValueEnum === trafficTypeValueEnum.Import">
+            <app-form-base [service]="transportService.importService">
+            </app-form-base>
+            <app-transport-label text="Importación"></app-transport-label>
+
+        </app-sub-panel-form>
+
+        <app-sub-panel-form title="Exportación"
+            *ngIf="transportService.trafficTypeValueEnum === trafficTypeValueEnum.Export">
+            <app-form-base [service]="transportService.exportService">
+            </app-form-base>
+            <app-transport-label text="Exportación"></app-transport-label>
+        </app-sub-panel-form>
+
+    </section>
+</app-panel-form>

@@ -1,0 +1,215 @@
+
+<div class="container mt-3 mb-3">
+<!------ PANEL DE DATOS DE RIESGO ------->
+<section #f1 class="c-form-panel">
+    <mat-card class="c-form-panel-card w-100 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'riesgos' && editable"></div>
+        <!--- CABECERA DE PANEL ---->
+        <mat-card-header class="c-form-panel-card__header">
+        
+        <mat-card-title  class="c-form-panel-card__title">
+            <h3>Datos Riesgos</h3>
+        </mat-card-title>
+    
+        <!--button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="cotizarService.datosProductorService.active || !canEditPanel('productor') || !editable"
+            (click)="editPanel('productor')">Modificar</button-->
+        </mat-card-header>
+
+         <!--- BODY DE_ PANEL ---->
+        <mat-card-content class="container">
+
+            <form class="dynamic-form" [formGroup]="cotizarService.datosRiesgoService.formGroup"> 
+                <app-dynamic-form-content class="row"
+                    [formConfig]="cotizarService.datosRiesgoService.formGroupConfig" [formGroup]="cotizarService.datosRiesgoService.formGroup">
+                </app-dynamic-form-content>
+            </form>
+
+        </mat-card-content>
+
+        <!---- BOTONES DE ACCIONES DE PANEL ----->
+        <mat-card-actions  class="container" align="end" [hidden]="!cotizarService.datosRiesgoService.active || !editable">
+            <button 
+                color="primary"
+                class="c-form-panel-card__confirm-btn ml-2"
+                [disabled]="!cotizarService.datosRiesgoService.valid"
+                mat-flat-button 
+                (click)="nextPanelRiesgos()">Confirmar</button>
+        </mat-card-actions>
+    </mat-card>
+</section>
+<!-----FIN DE PANEL  DATOS DE RIESGO ------>
+
+<!----- PANEL DE TRANSITO LOCAL ------>
+<section #f2 class="c-form-panel" *ngIf="cotizarService.transitoLocalService.show">
+    <mat-card class="c-form-panel-card w-100 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'transito-local' && editable"></div>
+        <!--- CABECERA DE PANEL ---->
+        <mat-card-header class="c-form-panel-card__header">
+        
+        <mat-card-title  class="c-form-panel-card__title">
+            <h3>Tránsito Local</h3>
+        </mat-card-title>
+    
+        <!--button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="cotizarService.datosProductorService.active || !canEditPanel('productor') || !editable"
+            (click)="editPanel('productor')">Modificar</button-->
+        </mat-card-header>
+
+         <!--- BODY DE_ PANEL ---->
+        <mat-card-content class="container">
+
+            <!-- Transito Local-->
+            <form class="dynamic-form" [formGroup]="cotizarService.transitoLocalService.formGroup"> 
+                <app-dynamic-form-content class="row"
+                    [formConfig]="cotizarService.transitoLocalService.formGroupConfig" [formGroup]="cotizarService.transitoLocalService.formGroup">
+                </app-dynamic-form-content>
+            </form>
+
+            <!-- Importacion -->
+            <!--form class="dynamic-form" [formGroup]="cotizarService.importacionService.formGroup"> 
+                <app-dynamic-form-content class="row"
+                    [formConfig]="cotizarService.importacionService.formGroupConfig" [formGroup]="cotizarService.importacionService.formGroup">
+                </app-dynamic-form-content>
+            </form-->
+
+        </mat-card-content>
+
+        <!---- BOTONES DE ACCIONES DE PANEL ----->
+        <mat-card-actions  class="container" align="end" [hidden]="!cotizarService.transitoLocalService.active || !editable">
+            <button mat-button (click)="backToDatosRiesgos(f1)">Atrás</button>
+            <button 
+                color="primary"
+                class="c-form-panel-card__confirm-btn ml-2"
+                [disabled]="!cotizarService.transitoLocalService.valid"
+                mat-flat-button 
+                (click)="nextPanelCoberturas(f3)">Confirmar</button>
+        </mat-card-actions>
+    </mat-card>
+</section>
+<!-----FIN DE PANEL  TRANSITO LOCAL  ------>
+
+<!----- PANEL DE IMPORTACION ------>
+<section #f2 class="c-form-panel" *ngIf="cotizarService.importacionService.show">
+    <mat-card class="c-form-panel-card w-100 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'importacion' && editable"></div>
+        <!--- CABECERA DE PANEL ---->
+        <mat-card-header class="c-form-panel-card__header">
+        
+        <mat-card-title  class="c-form-panel-card__title">
+            <h3>Importación</h3>
+        </mat-card-title>
+    
+        <!--button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="cotizarService.datosProductorService.active || !canEditPanel('productor') || !editable"
+            (click)="editPanel('productor')">Modificar</button-->
+        </mat-card-header>
+
+         <!--- BODY DE_ PANEL ---->
+        <mat-card-content class="container">
+
+            <form class="dynamic-form" [formGroup]="cotizarService.importacionService.formGroup"> 
+                <app-dynamic-form-content class="row"
+                    [formConfig]="cotizarService.importacionService.formGroupConfig" [formGroup]="cotizarService.importacionService.formGroup">
+                </app-dynamic-form-content>
+            </form>
+
+        </mat-card-content>
+
+        <!---- BOTONES DE ACCIONES DE PANEL ----->
+        <mat-card-actions  class="container" align="end" [hidden]="!cotizarService.importacionService.active || !editable">
+            <button mat-button (click)="backToDatosRiesgos(f1)">Atrás</button>
+            <button 
+                color="primary"
+                class="c-form-panel-card__confirm-btn ml-2"
+                [disabled]="!cotizarService.importacionService.valid"
+                mat-flat-button 
+                (click)="nextPanelCoberturas(f3)">Confirmar</button>
+        </mat-card-actions>
+    </mat-card>
+</section>
+<!-----FIN DE PANEL  IMPORTACION  ------>
+<!----- PANEL DE EXPORTACION ------>
+<section #f2 class="c-form-panel" *ngIf="cotizarService.exportacionService.show">
+    <mat-card class="c-form-panel-card w-100 mat-elevation-z0 bordered-panel p-4 card-border-primary">
+        <div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'exportacion' && editable"></div>
+        <!--- CABECERA DE PANEL ---->
+        <mat-card-header class="c-form-panel-card__header">
+        
+        <mat-card-title  class="c-form-panel-card__title">
+            <h3>Exportación</h3>
+        </mat-card-title>
+    
+        <!--button 
+            mat-button 
+            class="c-form-panel__edit-button align-left" 
+            [hidden]="cotizarService.datosProductorService.active || !canEditPanel('productor') || !editable"
+            (click)="editPanel('productor')">Modificar</button-->
+        </mat-card-header>
+
+         <!--- BODY DE_ PANEL ---->
+        <mat-card-content class="container">
+
+            <form class="dynamic-form" [formGroup]="cotizarService.exportacionService.formGroup"> 
+                <app-dynamic-form-content class="row"
+                    [formConfig]="cotizarService.exportacionService.formGroupConfig" [formGroup]="cotizarService.exportacionService.formGroup">
+                </app-dynamic-form-content>
+            </form>
+
+        </mat-card-content>
+
+        <!---- BOTONES DE ACCIONES DE PANEL ----->
+        <mat-card-actions  class="container" align="end" [hidden]="!cotizarService.exportacionService.active || !editable">
+            <button mat-button (click)="backToDatosRiesgos(f1)">Atrás</button>
+            <button 
+                color="primary"
+                class="c-form-panel-card__confirm-btn ml-2"
+                [disabled]="!cotizarService.exportacionService.valid"
+                mat-flat-button 
+                (click)="nextPanelCoberturas(f3)">Confirmar</button>
+        </mat-card-actions>
+    </mat-card>
+</section>
+<!-----FIN DE PANEL  EXPORTACION  ------>
+
+<!----- PANEL DE COBERTURAS ------>
+<section #f3>
+    <mat-card class="c-form-panel-card w-100 mt-3 mat-elevation-z0 bordered-panel p-4 card-border-secundary">
+      <div class="c-form-panel-card-blur-overlay" *ngIf="activePanelName !== 'coberturas'"></div>
+      <mat-card-header class="c-form-panel-card__header">
+      <mat-card-title  class="c-form-panel-card__title">
+        <h3>Coberturas</h3></mat-card-title>
+        <button 
+          mat-button 
+          class="c-form-panel__edit-button align-left" 
+          [hidden]="cotizarService.coberturasService.active || !canEditPanel('coberturas')"
+          (click)="editPanel('coberturas')">Modificar</button>
+      </mat-card-header>
+      <mat-card-content class="container">
+          <form
+              class="dynamic-form"
+              [formGroup]="cotizarService.coberturasService.formGroup"> 
+              <app-dynamic-form-content  class="row"
+                [formConfig]="cotizarService.coberturasService.formGroupConfig" [formGroup]="cotizarService.coberturasService.formGroup">
+            </app-dynamic-form-content>
+          </form>
+      </mat-card-content>
+      <mat-card-actions class="container" align="end" [hidden]="!cotizarService.coberturasService.active">
+        <button mat-button (click)="backPanelRiesgos()">Atrás</button>
+        <!--button 
+            color="primary"
+            class="c-form-panel-card__confirm-btn ml-2"
+            [disabled]="!cotizarService.coberturasService.valid"
+            mat-flat-button 
+            (click)="nextPanel(f3)">Confirmar</button-->
+      </mat-card-actions>
+    </mat-card>
+  </section>
+</div>
+<!-----FIN DE PANEL  COBERTURAS  ------>

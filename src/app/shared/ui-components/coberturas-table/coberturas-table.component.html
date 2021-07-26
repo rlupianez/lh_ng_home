@@ -1,0 +1,39 @@
+<app-table 
+    class="c-coberturas-form"
+    [loading]="isLoading" 
+    [iFormControl]="iFormControl" 
+    [controlOptions]="controlOptions" 
+    (addDialogEvent)="addDialogOpened()"
+    (arrayInputChange)="inputHasChange($event)"
+    (rowSelectionChange)="onRowSelected($event)"
+    [actionFormTitle]="addModalTitle"></app-table>
+
+<div *ngIf="!tableIsEmpty" class="d-flex bd-highlight flex-row-reverse mt-5">
+    <div class="p-2 flex-fill bd-highlight">
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-5 col-form-label font-weight-bold"><h5>Premio</h5></label>
+            <div class="col-sm-6" *ngIf="!loadingPremio">
+                <input readonly class="coberturas-totales-text form-control-plaintext text-right" value="{{ totals.premio | currency:'$' }}">
+            </div>
+            <div class="col-sm-6" *ngIf="loadingPremio">
+                ...
+            </div>
+        </div>
+    </div>
+    <div class="p-2 flex-fill bd-highlight">
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-6 col-form-label font-weight-bold"><h5>Suma Asegurada</h5></label>
+            <div class="col-sm-5">
+                <input type="text" readonly class="coberturas-totales-text form-control-plaintext text-right" value="{{ totals.suma_asegurada | currency:'$' }}">
+            </div>
+        </div>
+    </div>
+    <div class="p-2 flex-fill bd-highlight">
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-5 col-form-label font-weight-bold"><h5>Prima</h5></label>
+            <div class="col-sm-6">
+                <input type="text" readonly class="coberturas-totales-text form-control-plaintext text-right" value="{{ totals.prima | currency:'$' }}">
+            </div>
+        </div>
+    </div>
+</div>

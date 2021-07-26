@@ -1,6 +1,8 @@
-# La Holando NET - Extranet
-
-![alt text](https://www.laholando.com/images/banner-home/lh-home-100-anios-2.jpg)
+# HOLANDONET 
+# HOME HOLANDONET Y VS ver.2
+# CAMBIOS:
+# Fecha, Tarea, Programador, Descripcion
+# 
 
 ## Este proyecto está con construido con las siguientes tecnologias:
 
@@ -25,3 +27,11 @@ Ejecute `ng serve` para instanciar el servidor de desarrollo. Abre `http://local
 
 Ejecute `ng build` para compilar el proyecto. Los archivos compilados se encontrarán en el director `dist/`. Use el flag `--prod` cuando desea realizar la compilación dirigida al ambiente de producción.
 
+## or create a new repository on the command line
+## echo "# lh_ng_home" >> README.md
+## git init
+## git add README.md
+## git commit -m "first commit"
+## git branch -M main
+## git remote add origin https://github.com/rlupianez/lh_ng_home.git
+## git push -u origin main

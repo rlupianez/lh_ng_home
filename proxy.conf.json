@@ -1,0 +1,10 @@
+{
+    "/api": {
+        "secure": false,
+        "pathRewrite": {
+            "^/api": ""
+        },
+        "changeOrigin": true,
+        "target": "https://ehnet.laholando.com/rws"
+    }
+}

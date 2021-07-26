@@ -1,0 +1,49 @@
+<div id="siniestros-list-container" class="container-fluid mb-2">
+  
+        <div class="mt-1">
+
+            <app-report-filters [expanded]="panelExpanded" [title]="listTitle">
+                <app-filters-toolbar 
+                    class="mt-2" 
+                    [filters]="filtersFields" 
+                    (sendFilters)="applyFilters($event)"
+                    [formFilter]="form"
+                    [filtersVisibility]="formVisibility"
+                    (filtersFieldHasChange)="filterFieldChange($event)"></app-filters-toolbar>
+            </app-report-filters>
+                        
+        </div>
+        <!-- A Anular -->
+        <div class="row" *ngIf="incobrableSelected === 'Anular'"> 
+            <app-material-table class="col-sm-12 mt-3" 
+                [isLoading]="isLoadingResults" 
+                [dataSource]="listItems" 
+                [columns]="columns" 
+                [itemsTotal]="resultLength"
+                [filterAppliedSubject]="applyFilterInTable"
+                [filterHasChange]="filtersHasChange"
+                (paginationChange)="pageChange($event)"
+                [loadMoreBtn]="loadMorePaginator"
+                [hideExcelExport]="true"
+                [hidePDFDownload]="true"
+                (downloadExcelEvent)="downloadExcel($event)"></app-material-table>
+        </div>
+        <!-- Anuladas -->
+        <div class="row" *ngIf="incobrableSelected === 'Anuladas'">
+            <app-material-table class="col-sm-12 mt-3" 
+                [isLoading]="isLoadingResults" 
+                [dataSource]="anuladasListItems" 
+                [columns]="anuladasColumns" 
+                [itemsTotal]="resultLength"
+                [title]="tableTitle" 
+                [filterAppliedSubject]="applyFilterInTable"
+                [filterHasChange]="filtersHasChange"
+                (paginationChange)="pageChange($event)"
+                [loadMoreBtn]="loadMorePaginator"
+                [hideExcelExport]="true"
+                [hidePDFDownload]="true"
+                (downloadExcelEvent)="downloadExcel($event)"></app-material-table>
+        </div>
+
+</div>
+

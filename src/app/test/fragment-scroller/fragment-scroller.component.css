@@ -1,0 +1,16 @@
+.fragment {
+    height: 550px !important;
+    width: 100%;
+    display: table;
+    padding: 0.8rem;
+}
+
+.footer-panel {
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+.header-panel {
+    display: table-cell;
+    vertical-align: top;
+}

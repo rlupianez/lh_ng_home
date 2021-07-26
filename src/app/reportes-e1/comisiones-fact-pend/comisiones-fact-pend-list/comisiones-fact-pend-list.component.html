@@ -1,0 +1,18 @@
+<div id="siniestros-list-container" class="container-fluid mb-5">
+  
+        <div class="mt-1">
+            <app-report-filters [expanded]="panelExpanded" [title]="listTitle">
+                <app-filters-toolbar 
+                    class="mt-2" 
+                    [filters]="filtersFields" 
+                    [autoApplyFilters]="false"
+                    (sendFilters)="applyFilters($event)"
+                    (filtersFieldHasChange)="filterFieldChange($event)"
+                    [formFilter]="form"
+                    [filtersVisibility]="formVisibility"
+                    [customSubmitBtnText]="'Exportar'"></app-filters-toolbar>
+            </app-report-filters>
+        </div>
+   
+</div>
+

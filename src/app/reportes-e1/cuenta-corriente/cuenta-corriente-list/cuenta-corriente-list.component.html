@@ -1,0 +1,32 @@
+<div id="siniestros-list-container" class="container-fluid mb-2">
+        <div class="mt-1">
+            <app-report-filters [expanded]="panelExpanded" [title]="listTitle">
+                <app-filters-toolbar 
+                    class="mt-2" 
+                    [filters]="filtersFields" 
+                    (sendFilters)="applyFilters($event)"
+                    [formFilter]="form"
+                    [filtersVisibility]="formVisibility"
+                    (filtersFieldHasChange)="filterFieldChange($event)"></app-filters-toolbar>
+            </app-report-filters>
+
+        </div>
+        <div class="row" *ngIf="showTable">
+            <app-material-table 
+                class="col-sm-12 mt-3" 
+                [isLoading]="isLoadingResults" 
+                [dataSource]="listItems" 
+                [columns]="columns" 
+                [itemsTotal]="resultLength"
+                [pageSize]="tablePageSize"
+                [filterAppliedSubject]="applyFilterInTable"
+                [filterHasChange]="filtersHasChange"
+                (paginationChange)="pageChange($event)"
+                [hidePDFDownload]="true"
+                [loadMoreBtn]="loadMorePaginator"
+                [hideExcelExport]="true"
+                [hideToggleColumns]="true"
+                (downloadExcelEvent)="downloadExcel($event)"></app-material-table>
+        </div>
+</div>                       
+

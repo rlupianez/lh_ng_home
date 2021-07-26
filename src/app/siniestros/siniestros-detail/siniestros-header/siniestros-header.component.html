@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-6 row justify-content-start align-items-center mb-4">
+        <div class="section-icon detail-icon-tab text-center">
+            <div class="detail-icon-content">
+                <img [src]="sectionImg" class="img-fluid seccion-img" alt="Sección">
+            </div>
+        </div>  
+        <h3 class="detail-icon-title seccion-title pt-0 text-title-color">{{ sectionName }}</h3>
+    </div>
+    <!----------------------------------------------------------------------------->
+    <!-- ACCIONES NAV           --------------------------------------------------->
+    <!----------------------------------------------------------------------------->
+    <div class="col-xs-8 col-sm-8 col-md-6 col-lg-6 icons-bar mb-4 pr-0">
+        <ul class="nav justify-content-end">
+            
+            <ng-container *ngFor="let item of sectionActions">
+                <li class="nav-item" *ngIf="data[item['field']]" (click)="openAction(item, data[item['field']])"> 
+                    <div class="detail-icon-tab flex-fill text-center ml-4 m-2">
+                        <div class="detail-icon-content">
+                            <mat-icon class="detail-icon" aria-hidden="false" [svgIcon]="item['icon']"></mat-icon>
+                            <h6 class="detail-icon-title pt-2">{{ item['title'] }}</h6>
+                        </div>
+                    </div>           
+                </li>
+            </ng-container>
+            
+        </ul>  
+    </div>
+
+</div>

@@ -1,0 +1,43 @@
+
+<p class="nav">
+  <button mat-flat-button (click)="scroll(f1)">Fragment #1</button> 
+  <button mat-flat-button (click)="scroll(f2)">Fragment #2</button> 
+  <button mat-flat-button (click)="scroll(f3)">Fragment #3</button> 
+  <button mat-flat-button (click)="scroll(f4)">Fragment #4</button>
+</p>
+<div class="container h-100 p-2">
+  <section #f1 class="col-12 h-25 bg-primary fragment m-3" id="fragment-1">
+    <div class="row header-panel">
+      Fragment 
+    </div>
+    <div class="row footer-panel" align="end">
+      <button mat-flat-button (click)="scroll(f2)" color="primary">Confirmar</button> 
+    </div> 
+  </section>
+  <section #f2 class="col-12 h-25 bg-danger fragment m-3" id="fragment-2">
+    <div class="row header-panel">
+      Fragment 
+    </div>
+    <div class="row footer-panel" align="end">
+      <button mat-button (click)="scroll(f1)">Volver</button> 
+      <button mat-flat-button (click)="scroll(f3)" color="primary">Confirmar</button> 
+    </div> 
+  </section>
+  <section #f3 class="col-12 h-25 bg-info fragment m-3" id="fragment-3">
+    <div class="row header-panel">
+      Fragment 
+    </div>
+    <div class="row footer-panel" align="end">
+      <button mat-button (click)="scroll(f2)">Volver</button> 
+      <button mat-flat-button (click)="scroll(f4)" color="primary">Confirmar</button>
+    </div>
+  </section>
+  <section #f4 class="col-12 h-25 bg-primary fragment m-3" id="fragment-4">
+    <div class="row header-panel">
+      Fragment 
+    </div>
+    <div class="row footer-panel" align="end">
+      <button mat-button (click)="scroll(f3)" color="primary">Volver</button> 
+    </div> 
+  </section>
+</div>

@@ -1,0 +1,29 @@
+
+html, body {
+    height: 100vh;
+    margin: 0 auto;
+}
+.container {
+    height: 100%;
+}
+
+.container-fluid{
+  padding-top: 1%;
+}
+
+.content-nov-list{
+  min-height: 400px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.clear{
+  clear: both;
+}
+
+.content-list-nov{
+  max-height: 500px;
+}
+.indicador-home {
+  width: 100%;
+}
