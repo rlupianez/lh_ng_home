@@ -1,31 +1,13 @@
-# HOLANDONET 
-# HOME HOLANDONET Y VS ver.2
-# CAMBIOS:
-# Fecha, Tarea, Programador, Descripcion
-# 
-
-## Este proyecto está con construido con las siguientes tecnologias:
-
-<div float="left" style="margin-top: 3rem; margin-bottom: 7rem; text-align: center; float: left;">
-
-<figure style="width:30%; display: inline-block;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/AngularJS_logo.svg/695px-AngularJS_logo.svg.png" width="100%">
-<figcaption><a target="_blank" href="https://angular.io/" style="cursor: pointer;">Angular JS</a></figcaption>
-</figure>
-
-
-<figure style="margin-left: 7rem; width:30%; display: inline-block;"><img alt="Angular Material" src="https://webdesignledger.com/wp-content/uploads/2015/08/angularjs-materialDesign.png" width="100%">
-<figcaption><a target="_blank" href="https://material.angular.io//" style="cursor: pointer;">Angular Material</a></figcaption></figure>
-
-</div>
-
-## Servidor de Desarrollo
-
-Ejecute `ng serve` para instanciar el servidor de desarrollo. Abre `http://localhost:4200/` en el navegador para ver el proyecto. La aplicación se actualizará automaticamente al guardar los cambios.
-
-
-## Build
-
-Ejecute `ng build` para compilar el proyecto. Los archivos compilados se encontrarán en el director `dist/`. Use el flag `--prod` cuando desea realizar la compilación dirigida al ambiente de producción.
+<div>
+<h1>Holando Net</h1>
+<h2><b>Nombre del Projecto:</b> Home y Varios</h2>
+<h3><b>Versión:</b> 1</h3>
+<h3><b>Descripción:</b> Contiene las apps de  /home/ y otras heredadas de Habito1</h3>
+<h3><b>Carpeta de ejecución:</b> /app/home/<h3>
+<br>
+<p style="font:currier"><b>Fecha,Version,Programador,Tarea</b><br>
+26/07/2021,v1,rlupianez,#44632 - Bug fixings<br>
+</p>
 
 ## or create a new repository on the command line
 ## echo "# lh_ng_home" >> README.md
